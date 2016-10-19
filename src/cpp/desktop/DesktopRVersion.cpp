@@ -269,6 +269,27 @@ void enumRegistry(QList<RVersion>* pResults)
    enumRegistry(ArchX64, HKEY_LOCAL_MACHINE, pResults);
 }
 
+#if defined(CONDA_BUILD)
+void enumConda(QList<RVersion>* pResults)
+{
+   // The CONDA_PREFIX enviornment variable should get preference, followed
+   // by a relative path from the executable. This is similar to what we do
+   // in REnviornmentPosix.cpp
+   char* conda_prefix = getenv("CONDA_PREFIX");
+   // New Unix-a-like layout followed by the old Windows layout.
+   const char* pfxs[2] = {"/lib/R", "/R"};
+   const char* pfxs2[2] = {"/../../../lib/R", "/../../../R"};
+   for (int i = 0; i < 2; ++i) {
+      if (conda_prefix != NULL)
+         versionsFromRHome(QString::fromStdString(std::string(conda_prefix) + pfxs[i]), pResults);
+      QDir executable_path = QDir(QCoreApplication::applicationFilePath() + QString::fromLatin1(pfxs2[i])).absolutePath();
+      QString wtf = executable_path.absolutePath();
+      if (executable_path.exists())
+         versionsFromRHome(executable_path, pResults);
+   }
+}
+#endif
+
 // Return all valid versions of R we can find, nicely sorted and de-duped.
 // You can explicitly pass in versions that you know about (that may or
 // may not be valid) using the versions param.
@@ -276,6 +297,9 @@ QList<RVersion> allRVersions(QList<RVersion> versions)
 {
    versionsFromRHome(QString::fromStdString(system::getenv("R_HOME")),
                      &versions);
+#if defined(CONDA_BUILD)
+   enumConda(&versions);
+#endif
    enumRegistry(&versions);
    enumProgramFiles(&versions);
 
@@ -342,11 +366,17 @@ RVersion detectPreferredFromRegistry(HKEY key, Architecture architecture)
 
 RVersion autoDetect(Architecture architecture, bool preferredOnly)
 {
+#if !defined(CONDA_BUILD)
+   // Disable registry checks for conda, enumRegistry() is checked anyway,
+   // and conda doesn't consider the system R to be the preferred version.
+   // If anything, enumConda()'s result could be used here instead, though
+   // R_HOME still gets preference. RSTUDIO_WHICH_R is not used on Winodws
    RVersion preferred = detectPreferredFromRegistry(HKEY_CURRENT_USER, architecture);
    if (!preferred.isValid())
        preferred = detectPreferredFromRegistry(HKEY_LOCAL_MACHINE, architecture);
    if (preferred.isValid())
       return preferred;
+#endif
    if (preferredOnly)
       return RVersion();
 
