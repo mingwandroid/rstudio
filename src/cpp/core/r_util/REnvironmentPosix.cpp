@@ -108,6 +108,18 @@ FilePath systemDefaultRScript(std::string* pErrMsg)
 {
    // define potential paths
    std::vector<std::string> rScriptPaths;
+#if defined(CONDA_BUILD)
+   // The CONDA_PREFIX enviornment variable should get preference, followed
+   // by a relative path from the executable. This is similar to what we do
+   // in REnviornmentPosix.cpp
+   char* conda_prefix = getenv("CONDA_PREFIX");
+   if (conda_prefix != NULL)
+       rScriptPaths.push_back(std::string(conda_prefix) + "/bin/R");
+   FilePath prefix;
+   Error error = core::system::installPath("../bin/R", NULL, &prefix);
+   if (prefix.exists())
+      rScriptPaths.push_back(prefix.absolutePath());
+#endif
    rScriptPaths.push_back("/usr/bin/R");
    rScriptPaths.push_back("/usr/local/bin/R");
    rScriptPaths.push_back("/opt/local/bin/R");
