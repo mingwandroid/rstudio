@@ -164,7 +164,7 @@ endif()
 # determine whether we should statically link boost. we always do this
 # unless we are building a non-packaged build on linux (in which case
 # boost dynamic libraries are presumed to be installed on the system ldpath)
-if(APPLE OR WIN32 OR RSTUDIO_PACKAGE_BUILD)
+if(APPLE OR WIN32 OR RSTUDIO_PACKAGE_BUILD OR DEFINED ENV{CONDA_BUILD})
    set(Boost_USE_STATIC_LIBS ON)
 endif()
 
