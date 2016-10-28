@@ -18,6 +18,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
