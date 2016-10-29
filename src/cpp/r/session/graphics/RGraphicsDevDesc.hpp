@@ -16,6 +16,11 @@
 #ifndef R_SESSION_GRAPHICS_DEV_DESC_HPP
 #define R_SESSION_GRAPHICS_DEV_DESC_HPP
 
+#ifdef _MSC_VER
+#include <cstdlib>
+#include <cstring>
+#endif
+
 #include <Rinternals.h>
 
 #include <R_ext/Boolean.h>
