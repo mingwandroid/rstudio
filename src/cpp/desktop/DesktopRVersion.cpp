@@ -567,7 +567,7 @@ int RVersion::compareTo(const RVersion& other) const
    int c;
 
    // First order by version, descending
-   c = -(version() - other.version());
+   c = -(static_cast<int>(version()) - static_cast<int>(other.version()));
    if (c != 0)
       return c;
 
