@@ -28,28 +28,34 @@ set LIBCLANG_VERSION=5.0.2
 set LIBCLANG_NAME=libclang-windows-%LIBCLANG_VERSION%
 set LIBCLANG_FILE=%LIBCLANG_NAME%.zip
 
-if not exist gnudiff (
-  wget %WGET_ARGS% "%BASEURL%%GNUDIFF_FILE%"
-  mkdir gnudiff
-  echo Unzipping %GNUDIFF_FILE%
-  unzip %UNZIP_ARGS% "%GNUDIFF_FILE%" -d gnudiff
-  del "%GNUDIFF_FILE%"
+if not "%CONDA_BUILD%" == "1" (
+  if not exist gnudiff (
+    wget %WGET_ARGS% "%BASEURL%%GNUDIFF_FILE%"
+    mkdir gnudiff
+    echo Unzipping %GNUDIFF_FILE%
+    unzip %UNZIP_ARGS% "%GNUDIFF_FILE%" -d gnudiff
+    del "%GNUDIFF_FILE%"
+  )
 )
 
-if not exist gnugrep (
-  wget %WGET_ARGS% "%BASEURL%%GNUGREP_FILE%"
-  mkdir gnugrep
-  echo Unzipping %GNUGREP_FILE%
-  unzip %UNZIP_ARGS% "%GNUGREP_FILE%" -d gnugrep
-  del "%GNUGREP_FILE%"
+if not "%CONDA_BUILD%" == "1" (
+  if not exist gnugrep (
+    wget %WGET_ARGS% "%BASEURL%%GNUGREP_FILE%"
+    mkdir gnugrep
+    echo Unzipping %GNUGREP_FILE%
+    unzip %UNZIP_ARGS% "%GNUGREP_FILE%" -d gnugrep
+    del "%GNUGREP_FILE%"
+  )
 )
 
-if not exist msys-ssh-1000-18 (
-  wget %WGET_ARGS% "%BASEURL%%MSYS_SSH_FILE%"
-  mkdir msys-ssh-1000-18
-  echo Unzipping %MSYS_SSH_FILE%
-  unzip %UNZIP_ARGS% "%MSYS_SSH_FILE%" -d msys-ssh-1000-18
-  del "%MSYS_SSH_FILE%"
+if not "%CONDA_BUILD%" == "1" (
+  if not exist msys-ssh-1000-18 (
+    wget %WGET_ARGS% "%BASEURL%%MSYS_SSH_FILE%"
+    mkdir msys-ssh-1000-18
+    echo Unzipping %MSYS_SSH_FILE%
+    unzip %UNZIP_ARGS% "%MSYS_SSH_FILE%" -d msys-ssh-1000-18
+    del "%MSYS_SSH_FILE%"
+  )
 )
 
 if not exist sumatra\3.1.1 (
@@ -157,7 +163,9 @@ if not exist libclang\%LIBCLANG_VERSION% (
   del %LIBCLANG_FILE%
 )
 
-call install-packages.cmd
+if not "%CONDA_BUILD%" == "1" (
+  call install-packages.cmd
+)
 
 popd
 

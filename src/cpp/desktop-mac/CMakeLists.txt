@@ -71,26 +71,46 @@ file(GLOB PNG_FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources/png/*.png)
 set_source_files_properties(${PNG_FILES}
    PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
-# define bundle name and executable
-set(MACOSX_BUNDLE_BUNDLE_NAME "RStudio")
+if(NOT DEFINED ENV{CONDA_BUILD})
+   # define bundle name and executable
+   set(MACOSX_BUNDLE_BUNDLE_NAME "RStudio")
 
-add_executable(RStudio MACOSX_BUNDLE
-   ${DESKTOP_MAC_SOURCE_FILES}
-   ${DESKTOP_MAC_HEADER_FILES}
-   ${ICNS_FILES}
-   ${PNG_FILES})
+   add_executable(RStudio MACOSX_BUNDLE
+      ${DESKTOP_MAC_SOURCE_FILES}
+      ${DESKTOP_MAC_HEADER_FILES}
+      ${ICNS_FILES}
+      ${PNG_FILES})
 
 
-target_link_libraries(RStudio
-   rstudio-core
-   ${APPKIT_LIBRARY}
-   ${OPENGL_LIBRARY}
-   ${WEBKIT_LIBRARY})
+   target_link_libraries(RStudio
+      rstudio-core
+      ${APPKIT_LIBRARY}
+      ${OPENGL_LIBRARY}
+      ${WEBKIT_LIBRARY})
 
-# install target (OSX install goes into the bundle)
-set_target_properties(RStudio PROPERTIES
-  MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
-install(TARGETS RStudio BUNDLE DESTINATION .)
+
+   # install target (OSX install goes into the bundle)
+   set_target_properties(RStudio PROPERTIES
+     MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
+   install(TARGETS RStudio BUNDLE DESTINATION .)
+
+else()
+   add_executable(rstudio
+      ${DESKTOP_MAC_SOURCE_FILES}
+      ${DESKTOP_MAC_HEADER_FILES}
+   )
+
+   target_link_libraries(rstudio
+      rstudio-core
+      ${APPKIT_LIBRARY}
+      ${OPENGL_LIBRARY}
+      ${WEBKIT_LIBRARY})
+
+   # install target
+   install(TARGETS rstudio DESTINATION ${RSTUDIO_INSTALL_BIN})
+
+endif(NOT DEFINED ENV{CONDA_BUILD})
+
 
 # install mac-terminal script
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/mac-terminal.in

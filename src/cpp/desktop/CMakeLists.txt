@@ -324,10 +324,11 @@ endif(WIN32)
 # bundle it unless we are building on linux and NOT linking against the
 # qtsdk -- in that case we are linking against system versions of the
 # qt libraries which should therefore not be bundled
-if(APPLE OR WIN32 OR
-   RSTUDIO_PACKAGE_BUILD OR
-   (${QT_LIBRARY_DIR} MATCHES ".*QtSDK.*"))
-  set(RSTUDIO_BUNDLE_QT TRUE)
+if(NOT DEFINED ENV{CONDA_BUILD} AND
+   (APPLE OR WIN32 OR
+    RSTUDIO_PACKAGE_BUILD OR
+    (${QT_LIBRARY_DIR} MATCHES ".*QtSDK.*")))
+      set(RSTUDIO_BUNDLE_QT TRUE)
 endif()
 
 set(RSTUDIO_QTMODULES
@@ -353,10 +354,16 @@ if(UNIX AND NOT APPLE)
 )
 endif()
 
-# define executable (Windows & Linux)
-if(NOT APPLE)
+if(APPLE AND NOT DEFINED ENV{CONDA_BUILD})
+   set(RSTUDIO_EXE_NAME "RStudio")
+else()
+   set(RSTUDIO_EXE_NAME "rstudio")
+endif(APPLE AND NOT DEFINED ENV{CONDA_BUILD})
 
-   add_executable(rstudio
+# define executable (Windows & Linux)
+if(NOT APPLE OR DEFINED ENV{CONDA_BUILD})
+
+   add_executable(${RSTUDIO_EXE_NAME}
       ${DESKTOP_SOURCE_FILES}
       ${MOC_DESKTOP_SOURCE_FILES}
       ${DESKTOP_RESOURCES_SOURCES}
@@ -373,12 +380,12 @@ if(NOT APPLE)
    # add rpath for linux so we can find qt libraries in our bin dir
    if(UNIX AND RSTUDIO_BUNDLE_QT)
       set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-      set_target_properties(rstudio PROPERTIES
+      set_target_properties(${RSTUDIO_EXE_NAME} PROPERTIES
                             INSTALL_RPATH \$ORIGIN)
    endif()
 
    # set link dependencies
-   target_link_libraries(rstudio
+   target_link_libraries(${RSTUDIO_EXE_NAME}
       ${RSTUDIO_QTMODULES}
       ${QT_LIBRARIES}
       ${Boost_LIBRARIES}
@@ -388,7 +395,16 @@ if(NOT APPLE)
 
    # extra dependencies for Windows
    if(WIN32)
-      target_link_libraries(rstudio Version)
+      target_link_libraries(${RSTUDIO_EXE_NAME} Version)
+   endif()
+
+   # extra dependencies for Apple
+   if(APPLE)
+      target_link_libraries(${RSTUDIO_EXE_NAME}
+         ${APPLICATION_SERVICES_LIBRARY}
+         ${COCOA_LIBRARY}
+         ${SECURITY_LIBRARY}
+      )
    endif()
 
 # for OSX we create a bundle
@@ -412,7 +428,7 @@ else()
    # define bundle name and executable
    set(MACOSX_BUNDLE_BUNDLE_NAME "RStudio")
 
-   add_executable(RStudio MACOSX_BUNDLE
+   add_executable(${RSTUDIO_EXE_NAME} MACOSX_BUNDLE
       ${DESKTOP_SOURCE_FILES}
       ${MOC_DESKTOP_SOURCE_FILES}
       ${DESKTOP_RESOURCES_SOURCES}
@@ -420,7 +436,7 @@ else()
       ${ICNS_FILES}
       ${PNG_FILES})
 
-   target_link_libraries(RStudio
+   target_link_libraries(${RSTUDIO_EXE_NAME}
       ${RSTUDIO_QTMODULES}
       ${QT_LIBRARIES}
       rstudio-core
@@ -431,14 +447,19 @@ else()
 endif()
 
 # install target (OSX install goes into the bundle)
-if(APPLE)
-  set_target_properties(RStudio PROPERTIES
+if(APPLE AND NOT DEFINED{CONDA_BUILD})
+  set_target_properties(${RSTUDIO_EXE_NAME} PROPERTIES
      MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
-  install(TARGETS RStudio BUNDLE DESTINATION .)
-
+  install(TARGETS ${RSTUDIO_EXE_NAME} BUNDLE DESTINATION .
+                                      RUNTIME DESTINATION ${RSTUDIO_INSTALL_BIN})
   install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/RStudio.sdef
                    DESTINATION ${RSTUDIO_INSTALL_SUPPORTING})
 else()
+  if(APPLE)
+      install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/RStudio.sdef
+                       DESTINATION ${RSTUDIO_INSTALL_SUPPORTING})
+  endif()
+
   install(TARGETS rstudio DESTINATION ${RSTUDIO_INSTALL_BIN})
 endif()
 
@@ -531,7 +552,7 @@ if(RSTUDIO_BUNDLE_QT)
          add_library(${ICU_LIBRARY} SHARED IMPORTED)
          set_property(TARGET ${ICU_LIBRARY} PROPERTY IMPORTED_LOCATION "${QT_LIBRARY_DIR}/${ICU_LIBRARY}.so")
       endforeach()
-      target_link_libraries(rstudio ${ICU_LIBRARIES})
+      target_link_libraries(${RSTUDIO_EXE_NAME} ${ICU_LIBRARIES})
 
       # configure and install qt
       configure_file(

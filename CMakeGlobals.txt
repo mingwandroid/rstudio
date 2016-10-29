@@ -156,7 +156,7 @@ if(NOT EXISTS "${RSTUDIO_DEPENDENCIES_DIR}")
 endif()
 
 # special install directories for apple desktop
-if (APPLE AND RSTUDIO_DESKTOP)
+if (APPLE AND RSTUDIO_DESKTOP AND NOT DEFINED ENV{CONDA_BUILD})
    set(RSTUDIO_INSTALL_BIN RStudio.app/Contents/MacOS)
    set(RSTUDIO_INSTALL_SUPPORTING RStudio.app/Contents/Resources)
 else()
