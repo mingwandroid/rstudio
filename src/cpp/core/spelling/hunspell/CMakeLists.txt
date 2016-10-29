@@ -62,7 +62,17 @@ add_library(rstudio-core-hunspell STATIC
    ${CORE_HUNSPELL_HEADER_FILES})
 define_source_file_names(rstudio-core-hunspell)
 
+ add_compile_options($<TARGET_NAME:rstudio-core-hunspell>
+    -DHUNSPELL_STATIC -DBUILDING_LIBHUNSPELL
+)
+
+# .. the consumers of the static library need to define this (this *may* be
+# a CMake >=3 feature, and we may need instead to add this to the consumers
+# directly)
+set_target_properties(rstudio-core-hunspell PROPERTIES
+   INTERFACE_COMPILE_DEFINITIONS HUNSPELL_STATIC
+)
+
 # link dependencies
 target_link_libraries(rstudio-core-hunspell
-
 )
