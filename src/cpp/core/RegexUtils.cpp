@@ -26,6 +26,7 @@
 #include <boost/iostreams/filtering_stream.hpp>
 
 #include <core/StringUtils.hpp>
+#include <sstream>
 
 namespace rstudio {
 namespace core {

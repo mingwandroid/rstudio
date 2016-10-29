@@ -20,6 +20,9 @@
 
 #include <stdio.h>
 #include <fcntl.h>
+#ifdef _MSC_VER
+#include <io.h>
+#endif
 
 #include <core/Log.hpp>
 #include <shared_core/Error.hpp>
