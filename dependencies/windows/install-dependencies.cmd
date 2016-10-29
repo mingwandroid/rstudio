@@ -34,14 +34,17 @@ set NODE_BASE_URL=https://nodejs.org/dist/v%NODE_VERSION%/
 set NODE_ARCHIVE_DIR=node-v%NODE_VERSION%-win-x64
 set NODE_ARCHIVE_FILE=%NODE_ARCHIVE_DIR%.zip
 
-if not exist gnudiff (
-  wget %WGET_ARGS% "%BASEURL%%GNUDIFF_FILE%"
-  mkdir gnudiff
-  echo Unzipping %GNUDIFF_FILE%
-  unzip %UNZIP_ARGS% "%GNUDIFF_FILE%" -d gnudiff
-  del "%GNUDIFF_FILE%"
+if not "%CONDA_BUILD%" == "1" (
+  if not exist gnudiff (
+    wget %WGET_ARGS% "%BASEURL%%GNUDIFF_FILE%"
+    mkdir gnudiff
+    echo Unzipping %GNUDIFF_FILE%
+    unzip %UNZIP_ARGS% "%GNUDIFF_FILE%" -d gnudiff
+    del "%GNUDIFF_FILE%"
+  )
 )
 
+if "%CONDA_BUILD%" == "1" goto skip_msys2_provided_tools
 if not exist gnugrep (
   wget %WGET_ARGS% "%BASEURL%%GNUGREP_FILE%"
   mkdir gnugrep
@@ -66,6 +69,7 @@ if not exist sumatra\3.1.2 (
   del "%SUMATRA_PDF_FILE%"
 )
 
+:skip_msys2_provided_tools
 if not exist winutils\1.0 (
   wget %WGET_ARGS% "%BASEURL%%WINUTILS_FILE%"
   mkdir winutils\1.0
@@ -169,7 +173,9 @@ call yarn install
 popd
 
 
+if not "%CONDA_BUILD%" == "1" (
 call install-packages.cmd
+)
 
 popd
 

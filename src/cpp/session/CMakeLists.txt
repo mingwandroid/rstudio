@@ -620,7 +620,8 @@ if (NOT RSTUDIO_SESSION_WIN32)
    endif()
 
    # install gnudiff, mysys_ssh, and sumatra-pdf on windows
-   if(WIN32)
+# Conda builds provide their own m2w64-diffutils, m2w64-grep and m2-openssh pacakges.
+if(WIN32 AND NOT DEFINED ENV{CONDA_BUILD})
       install(DIRECTORY "${RSTUDIO_WINDOWS_DEPENDENCIES_DIR}/gnudiff"
               USE_SOURCE_PERMISSIONS
               DESTINATION  ${RSTUDIO_INSTALL_BIN})
