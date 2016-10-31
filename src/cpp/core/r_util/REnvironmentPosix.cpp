@@ -738,6 +738,7 @@ bool detectREnvironment(const FilePath& whichRScript,
                                    resolveRPath(rHomePath,
                                                 scriptVars["R_DOC_DIR"])));
 
+#if !defined(CONDA_BUILD) // This breaks everything on Linux (LD_LIBRARY_PATH ends up without /usr/lib64 etc).
    // determine library path (existing + r lib dir + r extra lib dirs)
    std::string libraryPath = rLibraryPath(rHomePath,
                                           rLibPath,
@@ -745,6 +746,7 @@ bool detectREnvironment(const FilePath& whichRScript,
                                           ldLibraryPath);
    
    pVars->push_back(std::make_pair(kLibraryPathEnvVariable, libraryPath));
+#endif
 
    // set R_ARCH on the mac if we are running against CRAN R
 #ifdef __APPLE__
