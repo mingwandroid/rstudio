@@ -46,6 +46,12 @@
 #include <Windows.h>
 #endif
 
+#ifdef _WIN32
+#define EXE_SUFFIX ".exe"
+#else
+#define EXE_SUFFIX ""
+#endif
+
 QProcess* pRSessionProcess;
 QString sharedSecret;
 
@@ -671,6 +677,45 @@ int main(int argc, char* argv[])
       auto* pProxyFactory = new NetworkProxyFactory();
       QNetworkProxyFactory::setApplicationProxyFactory(pProxyFactory);
 
+      // debugging in Visual Studio built with jom.
+#if defined(_WIN32) && defined(CONDA_BUILD)
+      if (!sessionPath.exists())
+      {
+         const std::string cppRelativeLocation("session");
+         const std::string exeName("rsession" EXE_SUFFIX);
+         std::string sessionFilename = sessionPath.filename();
+         FilePath executablePath;
+         FilePath cppFolder("");
+         std::string configDirname("");
+         error = core::system::installPath("", NULL, &executablePath);
+         if (!error)
+         {
+            // Find the cpp folder.
+            FilePath oldFolder;
+            cppFolder = executablePath;
+            configDirname = executablePath.filename();
+            do
+            {
+               oldFolder = cppFolder;
+               cppFolder = cppFolder.parent();
+            } while (cppFolder.filename() != "cpp" && cppFolder != oldFolder);
+         }
+         std::vector<FilePath> searchPaths;
+         if (cppFolder.filename() == "cpp")
+         {
+            searchPaths.push_back(cppFolder.complete(cppRelativeLocation + "/" + configDirname + "/" + exeName)); // Xcode + Visual Studio
+            searchPaths.push_back(cppFolder.complete(cppRelativeLocation + "/" + exeName)); // QtCreator (macOS) + jom (Win32)
+         }
+         for (std::vector<FilePath>::const_iterator it = searchPaths.begin(); it != searchPaths.end(); ++it)
+         {
+            if (it->exists())
+            {
+               sessionPath = FilePath(it->absolutePath());
+               break;
+            }
+         }
+      }
+#endif
       // set the scripts path in options
       desktop::options().setScriptsPath(scriptsPath);
 

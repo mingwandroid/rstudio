@@ -700,7 +700,7 @@ Error installPath(const std::string& relativeToExecutable,
    if (relativeToExecutable == "..") // common case
      *pInstallationPath = exePath.parent().parent();
    else
-     *pInstallationPath = exePath.parent().complete(relativeToExecutable);
+     *pInstallationPath = exePath.parent().complete(relativeToExecutable).lexically_normalized();
 
    return Success();
 }

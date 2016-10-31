@@ -362,6 +362,7 @@ FilePath Options::supportingFilePath() const
 {
    if (supportingFilePath_.empty())
    {
+#if !defined(CONDA_BUILD)
       // default to install path
       core::system::installPath("..",
                                 QApplication::arguments().at(0).toUtf8(),
@@ -371,6 +372,11 @@ FilePath Options::supportingFilePath() const
 #ifdef __APPLE__
          if (supportingFilePath_.complete("Info.plist").exists())
             supportingFilePath_ = supportingFilePath_.complete("Resources");
+#endif
+#else
+      core::system::installPath("../share/rstudio",
+                                QApplication::arguments().at(0).toUtf8(),
+                                &supportingFilePath_);
 #endif
    }
    return supportingFilePath_;

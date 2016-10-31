@@ -267,6 +267,11 @@ public:
       return core::FilePath(rpostbackPath_.c_str());
    }
 
+   core::FilePath diagnosticsPath() const
+   {
+      return core::FilePath(diagnosticsPath_.c_str());
+   }
+
    core::FilePath consoleIoPath() const
    {
       return core::FilePath(consoleIoPath_.c_str());
@@ -603,8 +608,18 @@ public:
 private:
    void resolvePath(const core::FilePath& resourcePath,
                     std::string* pPath);
+   void resolveIDEPath(const std::string& projectName,
+                       const std::string& exeName,
+                       bool preferIDEPath,
+                       std::string* pPath);
+   void bundleOrCondaResolvePath(const core::FilePath& resourcePath,
+                                 const std::string& defaultPath,
+                                 const std::string& bundlePath,
+                                 std::string* pPath);
    void resolvePostbackPath(const core::FilePath& resourcePath,
                             std::string* pPath);
+   void resolveDiagnosticsPath(const core::FilePath& resourcePath,
+                               std::string* pPath);
    void resolvePandocPath(const core::FilePath& resourcePath, std::string* pPath);
 
    void resolveRsclangPath(const core::FilePath& resourcePath, std::string* pPath);
@@ -699,6 +714,7 @@ private:
    
    // external
    std::string rpostbackPath_;
+   std::string diagnosticsPath_;
    std::string consoleIoPath_;
    std::string gnudiffPath_;
    std::string gnugrepPath_;

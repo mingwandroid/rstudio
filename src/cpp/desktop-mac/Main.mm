@@ -53,6 +53,14 @@ int main(int argc, char* argv[])
    
    // initialize application instance
    NSApplication* app = [NSApplication sharedApplication];
+
+   // https://www.cocoawithlove.com/2010/09/minimalist-cocoa-programming.html
+   // As conda build RStudio without an .app bundle. This is necessary
+   // to allow windows, menus and NSAlert dialogs to appear.
+   if ([[NSRunningApplication currentApplication] bundleIdentifier] == nil)
+   {
+      [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+   }
    
    // create our app delegate
    AppDelegate* appDelegate = [[[AppDelegate alloc] init] autorelease];

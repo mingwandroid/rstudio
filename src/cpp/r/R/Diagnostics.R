@@ -44,18 +44,7 @@ capture.output({
   print(search())
   
   # locate diagonstics binary and run it
-  sysName <- Sys.info()[['sysname']]
-  ext <- ifelse(identical(sysName, "Windows"), ".exe", "")
-  
-  # first look for debug version
-  cppDiag <- paste("../../../qtcreator-build/diagnostics/diagnostics",
-                ext, sep="")
-  if (!file.exists(cppDiag)) {
-    if (identical(sysName, "Darwin"))
-      cppDiag <- "../../MacOS/diagnostics"
-    else
-      cppDiag <- paste("../bin/diagnostics", ext, sep="")
-  }
+  cppDiag <- Sys.getenv("RS_DIAGNOSTICS_PATH")
   
   if (file.exists(cppDiag)) {
     diag <- system(cppDiag, intern=TRUE)

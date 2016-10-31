@@ -360,6 +360,22 @@ bool prepareEnvironment(Options& options)
          sessionPath_ = installPath.complete("MacOS/rsession");
          scriptsPath = installPath.complete("MacOS");
       }
+
+      // debugging in Xcode => some minor path manipulation, the #NDEBUG bit above
+      // could be used too I guess, but it doesn't allow debugging release builds
+      // and requires setting the current working directory.
+      if (!sessionPath.exists())
+      {
+         FilePath executablePath;
+         error = core::system::installPath("", NULL, &executablePath);
+         if (!error)
+         {
+            std::string dirname = executablePath.filename();
+            FilePath stubPath = installPath.parent();
+            sessionPath = stubPath.complete("session/" + dirname + "/rsession");
+            scriptsPath = stubPath.complete("desktop-mac");
+         }
+      }
    }
    
    // set the scripts path in options

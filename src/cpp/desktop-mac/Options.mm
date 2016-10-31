@@ -157,12 +157,16 @@ FilePath Options::supportingFilePath() const
 {
    if (supportingFilePath_.empty())
    {
+#if !defined(CONDA_BUILD)
       // default to install path
       core::system::installPath("..", NULL, &supportingFilePath_);
       
       // adapt for OSX resource bundles
       if (supportingFilePath_.complete("Info.plist").exists())
          supportingFilePath_ = supportingFilePath_.complete("Resources");
+#else
+      core::system::installPath("../share/rstudio", NULL, &supportingFilePath_);
+#endif
    }
    return supportingFilePath_;
 }

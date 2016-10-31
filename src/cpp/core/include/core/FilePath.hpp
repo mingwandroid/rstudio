@@ -189,6 +189,9 @@ public:
    // to this one; if input path is absolute returns that path)
    FilePath complete(const std::string& path) const;
    
+   // Return lexically normalized version of the input path. Requires boost >= 1.60.
+   FilePath lexically_normalized() const;
+
    // get child path relative to this one.
    FilePath childPath(const std::string& path) const ;
    

@@ -1766,6 +1766,12 @@ int main (int argc, char * const argv[])
             "RS_RPOSTBACK_PATH",
             string_utils::utf8ToSystem(rpostback.absolutePath()));
 
+      // set the diagnostics absolute path
+      FilePath diagnostics = options.diagnosticsPath();
+      core::system::setenv(
+            "RS_DIAGNOSTICS_PATH",
+            string_utils::utf8ToSystem(diagnostics.absolutePath()));
+
       // determine if this is a new user and get the first project path if so
       std::string firstProjectPath = "";
       bool newUser = false;

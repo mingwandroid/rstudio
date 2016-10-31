@@ -425,6 +425,12 @@ bool FilePath::hasExtensionLowerCase(const std::string& ext) const
    return extensionLowerCase() == ext;
 }
 
+FilePath FilePath::lexically_normalized() const
+{
+   path_t path = pImpl_->path.lexically_normal();
+   return FilePath(BOOST_FS_PATH2STR(path));
+}
+
 namespace {
 
 struct MimeType
