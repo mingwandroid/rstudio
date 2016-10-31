@@ -293,6 +293,7 @@ bool prepareEnvironment(Options& options)
 {
    // check for open file request (either apple event or command line)
    NSString* openFile = verifyAndNormalizeFilename(openFile_);
+   NSString* bundleId = [[NSRunningApplication currentApplication] bundleIdentifier];
    if (!openFile)
    {
       openFile = openFileCommandLineArgument();
@@ -355,7 +356,7 @@ bool prepareEnvironment(Options& options)
       scriptsPath = installPath.complete("bin");
       
       // check for running in a bundle
-      if (installPath.complete("Info.plist").exists())
+      if (bundleId != nil && !sessionPath.exists())
       {
          sessionPath_ = installPath.complete("MacOS/rsession");
          scriptsPath = installPath.complete("MacOS");
