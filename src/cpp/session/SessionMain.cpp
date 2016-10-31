@@ -1759,9 +1759,7 @@ int main (int argc, char * const argv[])
          core::thread::safeLaunchThread(detectParentTermination);
 
       // set the rpostback absolute path
-      FilePath rpostback = options.rpostbackPath()
-                           .parent().parent()
-                           .childPath("rpostback");
+      FilePath rpostback = options.rpostbackPath();
       core::system::setenv(
             "RS_RPOSTBACK_PATH",
             string_utils::utf8ToSystem(rpostback.absolutePath()));
