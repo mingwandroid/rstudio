@@ -213,21 +213,24 @@ sensitive information before submitting your diagnostics report.
   binaryPath <- local({
     
     # detect dev configurations
-    postback <- Sys.getenv("RS_RPOSTBACK_PATH", unset = NA)
+    postback <- Sys.getenv("RS_DIAGNOSTICS_PATH", unset = NA))
     if (!is.na(postback)) {
-      devpath <- file.path(dirname(postback), "../../diagnostics/diagnostics")
-      if (file.exists(devpath))
-        return(devpath)
-    }
+      postback <- Sys.getenv("RS_RPOSTBACK_PATH", unset = NA)
+      if (!is.na(postback)) {
+        devpath <- file.path(dirname(postback), "../../diagnostics/diagnostics")
+        if (file.exists(devpath))
+          return(devpath)
+      }
     
-    # detect release configurations
-    sysname <- Sys.info()[["sysname"]]
-    if (identical(sysname, "Darwin"))
-      "../../MacOS/diagnostics"
-    else if (identical(sysname, "Windows"))
-      "../bin/diagnostics.exe"
-    else
-      "../bin/diagnostics"
+      # detect release configurations
+      sysname <- Sys.info()[["sysname"]]
+      if (identical(sysname, "Darwin"))
+        "../../MacOS/diagnostics"
+      else if (identical(sysname, "Windows"))
+        "../bin/diagnostics.exe"
+      else
+        "../bin/diagnostics"
+    }
     
   })
     

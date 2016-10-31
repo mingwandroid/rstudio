@@ -83,6 +83,11 @@ public:
       return core::FilePath(userScratchPath_.c_str());
    }
 
+   core::FilePath diagnosticsPath() const
+   {
+      return core::FilePath(diagnosticsPath_.c_str());
+   }
+
    core::FilePath userLogPath() const
    {
       return userScratchPath().completeChildPath("log");
@@ -284,6 +289,18 @@ private:
    void resolvePostbackPath(const core::FilePath& resourcePath, std::string* pPath);
    void resolvePandocPath(const core::FilePath& resourcePath, std::string* pPath);
    void resolveRsclangPath(const core::FilePath& resourcePath, std::string* pPath);
+   void resolveIDEPath(const std::string& projectName,
+                       const std::string& exeName,
+                       bool preferIDEPath,
+                       std::string* pPath);
+   void bundleOrCondaResolvePath(const core::FilePath& resourcePath,
+                                 const std::string& defaultPath,
+                                 const std::string& bundlePath,
+                                 std::string* pPath);
+   void resolvePostbackPath(const core::FilePath& resourcePath,
+                            std::string* pPath);
+   void resolveDiagnosticsPath(const core::FilePath& resourcePath,
+                               std::string* pPath);
 
    void resolveOverlayOptions();
    bool allowOverlay() const;

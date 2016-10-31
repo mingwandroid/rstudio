@@ -1915,6 +1915,12 @@ int main (int argc, char * const argv[])
             "RS_RPOSTBACK_PATH",
             string_utils::utf8ToSystem(rpostback.getAbsolutePath()));
 
+      // set the diagnostics absolute path
+      FilePath diagnostics = options.diagnosticsPath();
+      core::system::setenv(
+            "RS_DIAGNOSTICS_PATH",
+            string_utils::utf8ToSystem(diagnostics.absolutePath()));
+
       std::string firstProjectPath = "";
       if (!options.verifyInstallation())
       {

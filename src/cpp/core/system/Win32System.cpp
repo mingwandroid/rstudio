@@ -522,7 +522,7 @@ Error installPath(const std::string& relativeToExecutable,
    if (relativeToExecutable == "..") // common case
      *pInstallationPath = exePath.getParent().getParent();
    else
-     *pInstallationPath = exePath.getParent().completePath(relativeToExecutable);
+     *pInstallationPath = exePath.getParent().completePath(relativeToExecutable).lexically_normalized();
 
    return Success();
 }
