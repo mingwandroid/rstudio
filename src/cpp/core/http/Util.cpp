@@ -417,8 +417,19 @@ core::FilePath requestedFile(const std::string& wwwLocalPath,
    // calculate "real" requested path
    FilePath realRequestedPath;
    FilePath requestedPath = wwwRealPath.complete(relativePath);
+#ifdef CONDA_BUILD
+   // Conda will use symlinks instead of hardlinks when hardlinks
+   // cannot be used. If we were to follow them, we would end up
+   // not inside the www path, so we do not do that.
+   realRequestedPath = FilePath(requestedPath.absolutePath());
+   error = realRequestedPath.exists()
+              ? Success()
+              : fileNotFoundError(realRequestedPath.absolutePath(),
+                                  ERROR_LOCATION);
+#else
    error = core::system::realPath(requestedPath.absolutePath(),
                                   &realRequestedPath);
+#endif
    if (error)
    {
       // log if this isn't file not found
