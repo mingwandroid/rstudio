@@ -107,6 +107,7 @@ Error SessionLauncher::launchFirstSession()
 
    RUN_DIAGNOSTICS_LOG("\nAttempting to launch R session...");
    logEnvVar("RSTUDIO_WHICH_R");
+   logEnvVar("RSTUDIO_SUPPORTING_FILE_PATH");
    logEnvVar("R_HOME");
    logEnvVar("R_DOC_DIR");
    logEnvVar("R_INCLUDE_DIR");
