@@ -18,6 +18,7 @@
 #include <core/Random.hpp>
 #include <core/SafeConvert.hpp>
 #include <core/system/System.hpp>
+#include <core/system/Environment.hpp>
 
 #import <Foundation/NSString.h>
 #import <Foundation/NSUserDefaults.h>
@@ -167,6 +168,13 @@ FilePath Options::supportingFilePath() const
 #else
       core::system::installPath("../share/rstudio", NULL, &supportingFilePath_);
 #endif
+      // debugging in Xcode/QtCreator => some minor path manipulation.
+      if (!supportingFilePath_.exists())
+      {
+         supportingFilePath_ = FilePath(core::system::getenv("RSTUDIO_SUPPORTING_FILE_PATH"));
+         if (!supportingFilePath_.exists())
+            supportingFilePath_ = FilePath("RSTUDIO_SUPPORTING_FILE_PATH_NOT_FOUND");
+      }
    }
    return supportingFilePath_;
 }

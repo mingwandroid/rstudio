@@ -129,6 +129,15 @@ core::ProgramStatus Options::read(int argc, char * const argv[], std::ostream& o
 #endif
       error = core::system::installPath("..", boost::dll::program_location().string().c_str(), &resourcePath_);
 
+   if (error || !resourcePath_.exists())
+   {
+      // debugging in Xcode/QtCreator/Visual Studio => some minor path manipulation.
+      FilePath& supportingFilePath_ = resourcePath_;
+      supportingFilePath_ = FilePath(core::system::getenv("RSTUDIO_SUPPORTING_FILE_PATH"));
+      if (error && supportingFilePath_.exists())
+         error = Success();
+   }
+
    if (error)
    {
       LOG_ERROR_MESSAGE("Unable to determine install path: "+error.getSummary());
