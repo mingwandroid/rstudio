@@ -22,7 +22,11 @@
 
 # ifndef RSTUDIO_NO_TESTTHAT_ALIASES
 
-#  define context(__X__, ...) TEST_CASE(__X__, __FILE__)
+#ifdef _MSC_VER
+#  define context(__X__, ...) TEST_CASE(__X__, __FILE__  __VA_ARGS__)
+#else
+#  define context(__X__, ...) TEST_CASE(__X__, __FILE__, ##__VA_ARGS__)
+#endif
 #  define test_that SECTION
 #  define expect_true(x) CHECK((x))
 #  define expect_false(x) CHECK_FALSE((x))
