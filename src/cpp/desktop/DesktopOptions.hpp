@@ -33,6 +33,18 @@
 #define FORMAT QSettings::IniFormat
 #endif
 
+#if defined(CONDA_BUILD)
+// We do not want the x64 settings being loaded by i686 RStudio and vice-versa because
+// they will point at different R installations.
+#if defined(__x86_64) || defined(__x86_64__) || defined(_M_X64) || defined(_M_AMD64)
+#define ARCH_SUFFIX "-x64"
+#else
+#define ARCH_SUFFIX "-i686"
+#endif
+#else
+#define ARCH_SUFFIX ""
+#endif
+
 namespace rstudio {
 namespace desktop {
 
@@ -116,7 +128,7 @@ public:
 private:
    Options() : settings_(FORMAT, QSettings::UserScope,
                          QString::fromUtf8("RStudio"),
-                         QString::fromUtf8("desktop")),
+                         QString::fromUtf8("desktop" ARCH_SUFFIX)),
                runDiagnostics_(false)
    {
    }
