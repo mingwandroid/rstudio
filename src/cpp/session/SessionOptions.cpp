@@ -81,7 +81,11 @@ const char* const kDefaultMsysSshPath = "bin/msys-ssh-1000-18";
 // resources directory so this gets us to prefix/bin
 // For gnudiff, gnugrep and msysssh we use conda's
 // m2w64-diffutils, m2w64-grep and m2-openssh respectively.
-const char* const kDefaultPandocPath = "../../bin/pandoc";
+#ifdef _WIN32
+   const char* const kDefaultPandocPath = "../../Scripts/pandoc";
+#else
+   const char* const kDefaultPandocPath = "../../bin/pandoc";
+#endif
 const char* const kDefaultPostbackPath = "../../bin/rpostback";
 const char* const kDefaultDiagnosticsPath = "../../bin/diagnostics";
 const char* const kDefaultConsoleIoPath = "../../bin/consoleio";
