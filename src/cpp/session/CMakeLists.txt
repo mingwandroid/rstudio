@@ -25,7 +25,7 @@ endif()
 if(NOT EXISTS "${RSTUDIO_DEPENDENCIES_DIR}/common/mathjax-27")
   message(FATAL_ERROR "Mathjax 2.7 not found (re-run install-dependencies script to install)")
 endif()
-if(NOT EXISTS "${RSTUDIO_DEPENDENCIES_DIR}/common/pandoc")
+if(NOT DEFINED ENV{CONDA_BUILD} AND NOT EXISTS "${RSTUDIO_DEPENDENCIES_DIR}/common/pandoc")
   message(FATAL_ERROR "pandoc not found (re-run install-dependencies script to install)")
 endif()
 

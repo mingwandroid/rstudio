@@ -135,14 +135,16 @@ if not exist "mathjax-27" (
   )
 )
 
-if not exist pandoc\%PANDOC_VERSION% (
-  wget %WGET_ARGS% "%BASEURL%pandoc/%PANDOC_VERSION%/%PANDOC_FILE%"
-  echo Unzipping %PANDOC_FILE%
-  unzip %UNZIP_ARGS% "%PANDOC_FILE%"
-  mkdir pandoc\%PANDOC_VERSION%
-  copy "%PANDOC_NAME%\pandoc*" "pandoc\%PANDOC_VERSION%""
-  del %PANDOC_FILE%
-  rmdir /s /q %PANDOC_NAME%
+if not "%CONDA_BUILD%" == "1" (
+  if not exist pandoc\%PANDOC_VERSION% (
+    wget %WGET_ARGS% "%BASEURL%pandoc/%PANDOC_VERSION%/%PANDOC_FILE%"
+    echo Unzipping %PANDOC_FILE%
+    unzip %UNZIP_ARGS% "%PANDOC_FILE%"
+    mkdir pandoc\%PANDOC_VERSION%
+    copy "%PANDOC_NAME%\pandoc*" "pandoc\%PANDOC_VERSION%""
+    del %PANDOC_FILE%
+    rmdir /s /q %PANDOC_NAME%
+  )
 )
 
 if not exist libclang\%LIBCLANG_VERSION% (
