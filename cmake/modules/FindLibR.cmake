@@ -17,8 +17,10 @@
 # LIBR_DOC_DIR
 # LIBR_LIBRARIES
 
+set(USE_MACOS_R_FRAMEWORK TRUE CACHE BOOL "Look for R framework on macOS")
+
 # detection for OSX (look for R framework)
-if(APPLE)
+if(APPLE AND USE_MACOS_R_FRAMEWORK)
 
    find_library(LIBR_LIBRARIES R)
 
