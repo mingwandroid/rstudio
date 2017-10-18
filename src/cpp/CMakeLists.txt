@@ -227,8 +227,8 @@ list(APPEND BOOST_LIBS
    thread
 )
 
-# UNIX BOOST
-if(UNIX)
+# UNIX BOOST OR CONDA_BUILD
+if(UNIX OR DEFINED ENV{CONDA_BUILD})
    # prefer static link to our custom built version
    set(RSTUDIO_TOOLS_BOOST /opt/rstudio-tools/boost/boost_1_69_0)
    if(NOT RSTUDIO_USE_SYSTEM_BOOST AND EXISTS ${RSTUDIO_TOOLS_BOOST})
@@ -255,6 +255,40 @@ if(UNIX)
          list(REMOVE_ITEM BOOST_LIBS signals)
       endif()
       find_package(Boost ${RSTUDIO_BOOST_REQUESTED_VERSION} REQUIRED COMPONENTS ${BOOST_LIBS})
+      set(ICU_DEBUG TRUE)
+      set(ICU_USE_STATIC_LIBS TRUE)
+      # This has no place here and it does not work anyway. It should be in FindICU.cmake
+      # (i.e. part of CMake itself). This is the most common way to bully CMake into
+      # finding static libs. It is truly awful and CMake continues to disappoint.
+      # edit: Seems it does work in a clean rebuild but we'll use our manual search instead.
+      if(ICU_USE_STATIC_LIBS)
+        set(_ICU_ORIG_CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_FIND_LIBRARY_SUFFIXES})
+        if(MSVC)
+          set(CMAKE_FIND_LIBRARY_SUFFIXES .lib .a)
+        else()
+          set(CMAKE_FIND_LIBRARY_SUFFIXES .a)
+        endif()
+      endif()
+       find_package(ICU COMPONENTS i18n uc data) # Must be linked in this order
+      # We should have found static libraries here, -ldl is needed due to libicuuc.a::uprv_dl_open_58
+      if(UNIX)
+         list(APPEND Boost_LIBRARIES ${ICU_LIBRARIES} -ldl)
+      else()
+         list(APPEND Boost_LIBRARIES ${ICU_LIBRARIES})
+      endif()
+      # .. and do not need to look for them 'manually':
+      # find_library(ICUI18N_LIBRARY icui18n)
+      # find_library(ICUUC_LIBRARY icuuc)
+      # find_library(ICUDATA_LIBRARY icudata)
+      if(ICU_USE_STATIC_LIBS)
+         set(CMAKE_FIND_LIBRARY_SUFFIXES ${_ICU_ORIG_CMAKE_FIND_LIBRARY_SUFFIXES})
+      endif()
+      # message(STATUS "Manually determined ICUI18N_LIBRARY as ${ICUI18N_LIBRARY}")
+      # message(STATUS "Manually determined ICUUC_LIBRARY as ${ICUUC_LIBRARY}")
+      # message(STATUS "Manually determined ICUDATA_LIBRARY as ${ICUDATA_LIBRARY}")
+      # list(APPEND Boost_LIBRARIES ${ICUI18N_LIBRARY} ${ICUUC_LIBRARY} ${ICUDATA_LIBRARY} -ldl)
+      message(STATUS "Using system Boost ${BOOST_VERSION}")
+      message(STATUS "Boost_LIBRARIES ${Boost_LIBRARIES}")
    endif()
 
 # WIN32 BOOST
