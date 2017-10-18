@@ -153,6 +153,11 @@ if(UNIX)
          add_definitions(-Wrestrict)
          add_definitions(-Wnull-dereference)
       endif()
+      # Apple have a macro in Cocoa somewhere called check()
+      # which conflicts with the Boost assert macros.
+      # See: https://github.com/facebook/osquery/pull/3613/files
+      # and: https://svn.boost.org/trac10/ticket/6219
+      add_definitions(-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0)
    endif()
 
 # Win32 specific global directives

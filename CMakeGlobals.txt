@@ -60,6 +60,9 @@ if (NOT RSTUDIO_UNIT_TESTS_DISABLED)
   add_definitions(-DRSTUDIO_UNIT_TESTS_ENABLED)
 endif()
 
+# Boost 1.65 / macOS fix: https://stackoverflow.com/q/31665095
+add_definitions(-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0)
+
 # platform specific default for targets
 if(NOT RSTUDIO_TARGET)
    set(RSTUDIO_TARGET "Development")
