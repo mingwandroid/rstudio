@@ -688,9 +688,9 @@ Error initCache()
 
    ExecBlock initBlock;
    initBlock.addFunctions()
-      (bind(registerRpcMethod, "create_notebook_from_cache", 
+      (boost::bind(registerRpcMethod, "create_notebook_from_cache",
             createNotebookFromCache))
-      (bind(registerRpcMethod, "extract_rmd_from_notebook", 
+      (boost::bind(registerRpcMethod, "extract_rmd_from_notebook",
             extractRmdFromNotebook));
    return initBlock.execute();
 }

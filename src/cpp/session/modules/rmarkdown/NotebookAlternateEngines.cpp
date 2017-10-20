@@ -819,8 +819,8 @@ Error initAlternateEngines()
 
    ExecBlock initBlock;
    initBlock.addFunctions()
-      (bind(sourceModuleRFile, "NotebookAlternateEngines.R"))
-      (bind(registerRpcMethod, "interrupt_chunk", interruptEngineChunk));
+      (boost::bind(sourceModuleRFile, "NotebookAlternateEngines.R"))
+      (boost::bind(registerRpcMethod, "interrupt_chunk", interruptEngineChunk));
    return initBlock.execute();
 }
 
