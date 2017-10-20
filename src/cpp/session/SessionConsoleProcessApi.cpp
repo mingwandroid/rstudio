@@ -962,22 +962,22 @@ Error initializeApi()
 
    ExecBlock initBlock ;
    initBlock.addFunctions()
-      (bind(registerRpcMethod, "process_start", procStart))
-      (bind(registerRpcMethod, "process_interrupt", procInterrupt))
-      (bind(registerRpcMethod, "process_reap", procReap))
-      (bind(registerRpcMethod, "process_write_stdin", procWriteStdin))
-      (bind(registerRpcMethod, "process_set_size", procSetSize))
-      (bind(registerRpcMethod, "process_set_caption", procSetCaption))
-      (bind(registerRpcMethod, "process_set_title", procSetTitle))
-      (bind(registerRpcMethod, "process_erase_buffer", procEraseBuffer))
-      (bind(registerRpcMethod, "process_get_buffer_chunk", procGetBufferChunk))
-      (bind(registerRpcMethod, "process_test_exists", procTestExists))
-      (bind(registerRpcMethod, "process_use_rpc", procUseRpc))
-      (bind(registerRpcMethod, "process_notify_visible", procNotifyVisible))
-      (bind(registerRpcMethod, "process_interrupt_child", procInterruptChild))
-      (bind(registerRpcMethod, "process_get_buffer", procGetBuffer))
-      (bind(registerRpcMethod, "get_terminal_shells", getTerminalShells))
-      (bind(registerRpcMethod, "start_terminal", startTerminal));
+      (boost::bind(registerRpcMethod, "process_start", procStart))
+      (boost::bind(registerRpcMethod, "process_interrupt", procInterrupt))
+      (boost::bind(registerRpcMethod, "process_reap", procReap))
+      (boost::bind(registerRpcMethod, "process_write_stdin", procWriteStdin))
+      (boost::bind(registerRpcMethod, "process_set_size", procSetSize))
+      (boost::bind(registerRpcMethod, "process_set_caption", procSetCaption))
+      (boost::bind(registerRpcMethod, "process_set_title", procSetTitle))
+      (boost::bind(registerRpcMethod, "process_erase_buffer", procEraseBuffer))
+      (boost::bind(registerRpcMethod, "process_get_buffer_chunk", procGetBufferChunk))
+      (boost::bind(registerRpcMethod, "process_test_exists", procTestExists))
+      (boost::bind(registerRpcMethod, "process_use_rpc", procUseRpc))
+      (boost::bind(registerRpcMethod, "process_notify_visible", procNotifyVisible))
+      (boost::bind(registerRpcMethod, "process_interrupt_child", procInterruptChild))
+      (boost::bind(registerRpcMethod, "process_get_buffer", procGetBuffer))
+      (boost::bind(registerRpcMethod, "get_terminal_shells", getTerminalShells))
+      (boost::bind(registerRpcMethod, "start_terminal", startTerminal));
 
    return initBlock.execute();
 }

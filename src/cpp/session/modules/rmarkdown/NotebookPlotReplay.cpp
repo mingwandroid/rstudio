@@ -349,9 +349,9 @@ core::Error initPlotReplay()
 
    ExecBlock initBlock;
    initBlock.addFunctions()
-      (bind(registerRpcMethod, "replay_notebook_plots", replayPlotOutput))
-      (bind(registerRpcMethod, "replay_notebook_chunk_plots", replayChunkPlotOutput))
-      (bind(registerRpcMethod, "clean_replay_notebook_chunk_plots", cleanReplayChunkPlotOutput));
+      (boost::bind(registerRpcMethod, "replay_notebook_plots", replayPlotOutput))
+      (boost::bind(registerRpcMethod, "replay_notebook_chunk_plots", replayChunkPlotOutput))
+      (boost::bind(registerRpcMethod, "clean_replay_notebook_chunk_plots", cleanReplayChunkPlotOutput));
 
    return initBlock.execute();
 }
