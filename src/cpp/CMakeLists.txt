@@ -161,6 +161,9 @@ if(RSTUDIO_PACKAGE_BUILD)
    add_definitions(-DRSTUDIO_PACKAGE_BUILD)
 endif()
 
+# Boost.Signals is no longer being maintained and is now deprecated. Please switch to Boost.Signals2
+add_definitions(-DBOOST_SIGNALS_NO_DEPRECATION_WARNING)
+
 # determine whether we should statically link boost. we always do this
 # unless we are building a non-packaged build on linux (in which case
 # boost dynamic libraries are presumed to be installed on the system ldpath)
@@ -176,6 +179,8 @@ if(NOT RSTUDIO_BOOST_REQUESTED_VERSION)
       set(RSTUDIO_BOOST_REQUESTED_VERSION 1.63.0)
    endif()
 endif()
+
+set(BOOST_VERSION 1.63.0 CACHE STRING "Boost version to use")
 
 # disable Boost Signals deprecation warning
 add_definitions(-DBOOST_SIGNALS_NO_DEPRECATION_WARNING)
