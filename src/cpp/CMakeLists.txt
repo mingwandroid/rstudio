@@ -15,6 +15,7 @@
 
 # set minimum version
 cmake_minimum_required(VERSION 3.4.3)
+cmake_policy(SET CMP0025 NEW)
 
 # read release name
 include("${CMAKE_CURRENT_SOURCE_DIR}/../../CMakeRelease.txt")
