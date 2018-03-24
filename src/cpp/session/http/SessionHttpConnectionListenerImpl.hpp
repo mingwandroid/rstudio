@@ -24,8 +24,8 @@
 #include <boost/asio/placeholders.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 
-#include <core/Macros.hpp>
 #include <core/BoostThread.hpp>
+#include <core/Macros.hpp>
 #include <shared_core/FilePath.hpp>
 #include <core/FileLock.hpp>
 #include <shared_core/Error.hpp>

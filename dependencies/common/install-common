@@ -19,7 +19,9 @@ set -e
 
 ./install-dictionaries
 ./install-mathjax
-./install-boost
+if [[ -z ${CONDA_BUILD} ]]; then
+  ./install-boost
+fi
 ./install-pandoc
 ./install-packages
 ./install-sentry-cli
