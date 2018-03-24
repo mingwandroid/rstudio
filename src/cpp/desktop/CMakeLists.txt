@@ -96,6 +96,10 @@ else()
    endif()
 endif()
 
+if(NOT QT_QMAKE_EXECUTABLE)
+   find_program(QT_QMAKE_EXECUTABLE qmake)
+endif()
+
 if(QT_QMAKE_EXECUTABLE)
    message(STATUS "Found Qt: ${QT_QMAKE_EXECUTABLE}")
 else()
