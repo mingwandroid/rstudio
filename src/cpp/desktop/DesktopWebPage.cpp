@@ -16,7 +16,7 @@
 #include "DesktopWebPage.hpp"
 
 #include <boost/algorithm/string.hpp>
-#include <boost/thread/once.hpp>
+#include <mutex>
 
 #include <core/http/URL.hpp>
 #include <core/Thread.hpp>
