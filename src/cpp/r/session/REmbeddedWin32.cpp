@@ -44,13 +44,15 @@
 
 #include <Rembedded.h>
 #include <graphapp.h>
-
-extern "C" void R_ProcessEvents(void);
-extern "C" void R_CleanUp(SA_TYPE, int, int);
-extern "C" void cmdlineoptions(int, char**);
+#include <R_ext/libextern.h>
 
 extern "C" {
-   __declspec(dllimport) UImode CharacterMode;
+	LibExtern void R_ProcessEvents(void);
+	LibExtern void R_CleanUp(SA_TYPE, int, int);
+}
+
+extern "C" {
+	LibExtern UImode CharacterMode;
 }
 
 using namespace rstudio::core;

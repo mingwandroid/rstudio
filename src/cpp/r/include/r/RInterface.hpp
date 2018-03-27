@@ -23,22 +23,23 @@
 
 #include <R_ext/Boolean.h>
 #include <R_ext/RStartup.h>
+#include <R_ext/libextern.h>
 
 extern "C" {
 
-void R_RestoreGlobalEnvFromFile(const char *, Rboolean);
-void R_SaveGlobalEnvToFile(const char *);
-void R_Suicide(const char *);
-char *R_HomeDir(void);
-void Rf_jump_to_toplevel(void);
+LibExtern void R_RestoreGlobalEnvFromFile(const char *, Rboolean);
+LibExtern void R_SaveGlobalEnvToFile(const char *);
+LibExtern void R_Suicide(const char *);
+LibExtern char *R_HomeDir(void);
+LibExtern void Rf_jump_to_toplevel(void);
 void Rf_onintr(void);
 #define R_ClearerrConsole void
-void R_FlushConsole();
-void run_Rmainloop();
-void Rf_mainloop(void);
+LibExtern void R_FlushConsole();
+LibExtern void run_Rmainloop();
+LibExtern void Rf_mainloop(void);
 
-extern __declspec(dllimport) int R_SignalHandlers;
-extern __declspec(dllimport) void* R_GlobalContext;
+LibExtern int R_SignalHandlers;
+LibExtern void* R_GlobalContext;
 
 }
 
