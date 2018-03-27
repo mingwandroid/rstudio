@@ -5,7 +5,7 @@ setlocal
 set PATH=%CD%\tools;%PATH%
 
 set WGET_ARGS=-c --no-check-certificate
-set UNZIP_ARGS=-q
+set UNZIP_ARGS=-q -o
 
 set BASEURL=https://s3.amazonaws.com/rstudio-buildtools/
 set GIN_FILE=gin-2.1.2.zip
