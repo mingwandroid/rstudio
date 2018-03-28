@@ -106,6 +106,8 @@ else()
       ${OPENGL_LIBRARY}
       ${WEBKIT_LIBRARY})
 
+   target_compile_definitions(rstudio PRIVATE "-DCONDA_BUILD")
+
    # install target
    install(TARGETS rstudio DESTINATION ${RSTUDIO_INSTALL_BIN})
 

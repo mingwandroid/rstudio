@@ -345,6 +345,10 @@ target_link_libraries(rstudio-core
    ${CORE_SYSTEM_LIBRARIES}
 )
 
+if(DEFINED ENV{CONDA_BUILD})
+   target_compile_definitions(rstudio-core PRIVATE "-DCONDA_BUILD")
+endif()
+
 # define executable (for running unit tests)
 if (RSTUDIO_UNIT_TESTS_ENABLED)
 

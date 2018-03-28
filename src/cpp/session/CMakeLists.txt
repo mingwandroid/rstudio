@@ -407,6 +407,10 @@ if(WIN32)
    endif()
 endif()
 
+if(DEFINED ENV{CONDA_BUILD})
+   target_compile_definitions(rsession PRIVATE "-DCONDA_BUILD")
+endif()
+
 # define executable
 add_stripped_executable(rsession ${SESSION_SOURCE_FILES} ${SESSION_HEADER_FILES})
 
