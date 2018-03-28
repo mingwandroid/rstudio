@@ -200,14 +200,19 @@ Error initialize()
    // ensure that the utils package is loaded (it might not be loaded
    // if R is attempting to recover from a library loading error which
    // occurs during .Rprofile)
+   LOG_WARNING_MESSAGE("initialize 1");
    Error libError = r::exec::RFunction("library", "utils").call();
+   LOG_WARNING_MESSAGE("initialize 2");
    if (libError)
       LOG_ERROR(libError);
+   LOG_WARNING_MESSAGE("initialize 3");
 
    // check whether this is R 3.3 or greater
    Error r33Error = r::exec::evaluateString("getRversion() >= '3.3.0'", &s_isR3_3);
+   LOG_WARNING_MESSAGE("initialize 4");
    if (r33Error)
       LOG_ERROR(r33Error);
+   LOG_WARNING_MESSAGE("initialize 5");
 
    if (s_isR3_3)
    {
@@ -221,6 +226,7 @@ Error initialize()
          LOG_ERROR(r3Error);
    }
 
+   LOG_WARNING_MESSAGE("initialize 6");
    // initialize console history capacity
    r::session::consoleHistory().setCapacityFromRHistsize();
 
@@ -232,9 +238,11 @@ Error initialize()
 
    // install RStudio API
    FilePath apiFilePath = utils::rSourcePath().complete("Api.R");
+   LOG_WARNING_MESSAGE("initialize 7");
    error = r::sourceManager().sourceTools(apiFilePath);
    if (error)
       return error;
+   LOG_WARNING_MESSAGE("initialize 8");
 
    // initialize graphics device -- use a stable directory for server mode
    // and temp directory for desktop mode (so that we can support multiple
@@ -252,6 +260,7 @@ Error initialize()
       graphicsPath = r::session::utils::tempDir().complete(
                               "rs-graphics-" + core::system::generateUuid());
    }
+   LOG_WARNING_MESSAGE("initialize 9");
 
    error = graphics::device::initialize(graphicsPath,
                                         rCallbacks().locator);
@@ -262,12 +271,14 @@ Error initialize()
    session::clientState().restore(utils::clientStatePath(),
                                   utils::projectClientStatePath());
       
+   LOG_WARNING_MESSAGE("initialize 10");
    // restore suspended session if we have one
    bool wasResumed = false;
    
    // first check for a pending restart
    if (restartContext().hasSessionState())
    {
+      LOG_WARNING_MESSAGE("initialize 11");
       // restore session
       std::string errorMessages ;
       restoreSession(restartContext().sessionStatePath(), &errorMessages);
@@ -282,6 +293,7 @@ Error initialize()
    else if (suspendedSessionPath().exists())
    {  
       // restore session
+      LOG_WARNING_MESSAGE("initialize 12");
       std::string errorMessages ;
       restoreSession(suspendedSessionPath(), &errorMessages);
       
@@ -295,6 +307,7 @@ Error initialize()
    // new session
    else
    {  
+      LOG_WARNING_MESSAGE("initialize 13");
       // restore console history
       FilePath historyPath = rHistoryFilePath();
       error = consoleHistory().loadFromFile(historyPath, false);
@@ -306,6 +319,7 @@ Error initialize()
    }
    
    // initialize client
+   LOG_WARNING_MESSAGE("initialize 14");
    RInitInfo rInitInfo(wasResumed);
    error = rCallbacks().init(rInitInfo);
    if (error)
@@ -329,6 +343,7 @@ Error initialize()
       if (error)
          return error;
    }
+   LOG_WARNING_MESSAGE("initialize 15");
 
    // initialize profile resources
    error = r::exec::RFunction(".rs.profileResources").call();
@@ -346,6 +361,7 @@ Error initialize()
    if (error)
       return error;
 
+   LOG_WARNING_MESSAGE("initialize 16");
    // server specific R options options
    if (utils::isServerMode())
    {
