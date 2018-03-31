@@ -470,6 +470,16 @@ else()
   install(TARGETS rstudio DESTINATION ${RSTUDIO_INSTALL_BIN})
 endif()
 
+# https://stackoverflow.com/q/15761583
+# https://forums.developer.apple.com/thread/17757
+# If this does not work then we may be able to add "-Xlinker -U -Xlinker _objc_readClassPair" to the
+# linker flags.
+if(APPLE)
+   if(CMAKE_GENERATOR STREQUAL Xcode)
+      set_target_properties(${RSTUDIO_EXE_NAME} PROPERTIES XCODE_ATTRIBUTE_CLANG_LINK_OBJC_RUNTIME "NO")
+   endif()
+endif()
+
 # bundle qt dependencies if this is a package build
 if(RSTUDIO_BUNDLE_QT)
    # set lib suffix for windows
