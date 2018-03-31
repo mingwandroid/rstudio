@@ -41,11 +41,15 @@ if(DEFINED ENV{GWT_BUILD})
 endif()
 
 if(GWT_BUILD)
+   find_program(ANT ant)
+   if(NOT ANT)
+      message(FATAL_ERROR "ant not found!")
+   endif()
    add_custom_target(gwt_build ALL)
    add_custom_command(
       TARGET gwt_build
       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-      COMMAND ant -Dbuild.dir="${GWT_BIN_DIR}"
+      COMMAND ${ANT} -Dbuild.dir="${GWT_BIN_DIR}"
                   -Dwww.dir="${GWT_WWW_DIR}"
                   -Dextras.dir="${GWT_EXTRAS_DIR}"
                   -Dlib.dir="${GWT_LIB_DIR}")
