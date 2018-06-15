@@ -38,8 +38,10 @@ DownloadHelper::DownloadHelper(QWebEngineDownloadItem* item)
    connect(item, &QWebEngineDownloadItem::finished,
            this, &DownloadHelper::onFinished);
    
+#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
    connect(item, &QWebEngineDownloadItem::isPausedChanged,
            this, &DownloadHelper::onPausedChanged);
+#endif
    
    connect(item, &QWebEngineDownloadItem::stateChanged,
            this, &DownloadHelper::onStateChanged);
