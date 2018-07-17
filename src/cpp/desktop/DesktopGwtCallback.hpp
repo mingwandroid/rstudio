@@ -280,6 +280,7 @@ public Q_SLOTS:
 
 private:
    Synctex& synctex();
+
    void activateAndFocusOwner();
 
 private:

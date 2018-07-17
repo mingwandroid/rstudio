@@ -165,10 +165,6 @@ NSArray* parseFileNameFilters(NSString* fileNameFilters)
 
 RS_END_NAMESPACE()
 
-void GwtCallback::initialize()
-{
-}
-
 int GwtCallback::showMessageBox(int type,
                                 QString qCaption,
                                 QString qMessage,

@@ -77,8 +77,6 @@ GwtCallback::GwtCallback(MainWindow* pMainWindow, GwtWindow* pOwner, bool isRemo
      pSynctex_(nullptr),
      pendingQuit_(PendingQuitNone)
 {
-   initialize();
-   
 #ifdef Q_OS_LINUX
    // assume light theme on startup (theme will be dynamically updated
    // based on editor theme chosen by user)
@@ -105,14 +103,6 @@ GwtCallback::GwtCallback(MainWindow* pMainWindow, GwtWindow* pOwner, bool isRemo
       }
    }
 #endif
-}
-
-#ifndef Q_OS_MAC
-void GwtCallback::initialize()
-{
-}
-#endif
-
 Synctex& GwtCallback::synctex()
 {
    if (pSynctex_ == nullptr)
