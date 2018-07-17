@@ -74,8 +74,6 @@ GwtCallback::GwtCallback(MainWindow* pMainWindow, GwtWindow* pOwner)
      pSynctex_(nullptr),
      pendingQuit_(PendingQuitNone)
 {
-   initialize();
-   
 #ifdef Q_OS_LINUX
    // assume light theme on startup (theme will be dynamically updated
    // based on editor theme chosen by user)
@@ -102,17 +100,6 @@ GwtCallback::GwtCallback(MainWindow* pMainWindow, GwtWindow* pOwner)
       }
    }
 #endif
-}
-
-#ifndef Q_OS_MAC
-void GwtCallback::initialize()
-{
-}
-#endif
-
-void GwtCallback::invokeReflowComment()
-{
-   pMainWindow_->invokeCommand(QStringLiteral("reflowComment"));
 }
 
 Synctex& GwtCallback::synctex()
