@@ -118,7 +118,6 @@ find_package(Qt5WebEngineWidgets REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
 find_package(Qt5Quick REQUIRED)
 find_package(Qt5QuickWidgets REQUIRED)
-find_package(Qt5Sensors REQUIRED)
 find_package(Qt5Svg REQUIRED)
 find_package(Qt5Xml REQUIRED)
 find_package(Qt5XmlPatterns REQUIRED)
@@ -338,7 +337,6 @@ set(RSTUDIO_QTMODULES
     Qt5::PrintSupport
     Qt5::Quick
     Qt5::QuickWidgets
-    Qt5::Sensors
     Qt5::Svg
     Qt5::Xml
     Qt5::XmlPatterns
